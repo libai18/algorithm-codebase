@@ -6,7 +6,7 @@
 
 
 
-![]((https://github.com/libai18/algorithm-codebase/blob/main/picture/6-6-1.jpg)
+![]((https://github.com/libai18/algorithm-codebase/blob/main/picture/6-6-1.jpg?raw=true)
 
 ### ①代码参考
 
