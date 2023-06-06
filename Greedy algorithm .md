@@ -6,7 +6,7 @@
 
 
 
-![](C:\Users\Lenovo\Pictures\pict\6-6\1364554174_8902.jpg)
+<img src="C:\Users\Lenovo\Pictures\pict\6-6\1364554174_8902.jpg" style="zoom:80%;" />
 
 ### ①代码参考
 
