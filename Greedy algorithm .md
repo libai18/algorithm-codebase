@@ -6,7 +6,8 @@
 
 
 
-<img src="C:\Users\Lenovo\Pictures\pict\6-6\1364554174_8902.jpg" style="zoom:80%;" />
+  <img src="image/1.jpg" />
+                                                                   
 
 ### ①代码参考
 
