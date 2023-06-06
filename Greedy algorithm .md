@@ -6,7 +6,7 @@
 
 
 
-<img src="C:\Users\Lenovo\Pictures\pict\6-6\1364554174_8902.jpg" style="zoom:80%;" />
+![]((https://github.com/libai18/algorithm-codebase/blob/main/picture/6-6-1.jpg)
 
 ### ①代码参考
 
