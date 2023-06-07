@@ -333,11 +333,7 @@ W=30
 
 所以需要说明的是，贪心算法可以与随机化算法一起使用，具体的例子就不再多举了。（因为这一类算法普及性不高，而且技术含量是非常高的，需要通过一些反例确定随机的对象是什么，随机程度如何，但也是不能保证完全正确，只能是极大的几率正确）。
 
-
-
 网上对于这个装包问题的描述就就只有这些,但是在这里我还是要写一下,假设条件是什么?假设条件是上述几种反例的情况不存在的时候该如何求解:
-
-
 
 ```c
 #include <iostream>
@@ -405,4 +401,165 @@ int main(int argc, char* argv[])
 }
 ```
 
+下面我要说的是，这个算法里面就是采用的贪心第三方案，一般这个方案是成功率最大的，其他两个方案我在这里没有考虑，在这里得到的结果是利用了115容量装了价值195的东西，但是这明显不是最优结果，分明还可以装一个A进去！刚好满足150重量，由于在算法中我单纯的利用第三种贪心方法求解，当剩余的包裹中最优的再加进来的时候已经超过了，所以这个时候可以选择剩余包裹中次优的（如这里选择A），再不行就次次优的，尽量把包裹装满，这样得到的结果就很接近了（不保证一定为最优），但是我们一般不这样来求解，下一文章会介绍动态规划算法来解决这个问题，动态规划很好的弥补了贪心算法的不足！详见下一章！！
 
+还需要说明的是，如果包裹是可以拆分的，那这个问题就得到了整体最优解，前面不变，就是当最后一次装进去已经超过容量的时候可以选择只装她的一部分！很多编程题一般是这种情况！
+
+
+## 4.数字组合问题
+
+设有N个正整数，现在需要你设计一个程序，使他们连接在一起成为最大的数字，例3个整数 12,456,342 很明显是45634212为最大，4个整数 342，45,7,98显然为98745342最大
+
+程序要求：输入整数N 接下来一行输入N个数字，最后一行输出最大的那个数字！
+
+题目解析：拿到这题目，看起要来也简单，看起来也难，简单在什么地方，简单在好像就是寻找哪个开头最大，然后连在一起就是了，难在如果N大了，假如几千几万，好像就不是那么回事了，要解答这个题目需要选对合适的贪心策略，并不是把数字由大排到小那么简单，网上的解法是将数字转化为字符串，比如a+b和b+a，用strcmp函数比较一下就知道谁大，也就知道了谁该排在谁前面，不过我觉得这个完全没必要，在这里我采用一种比较巧妙的方法来解答，不知道大家还记得冒泡排序法不，那是排序最早接触的一种方法，我们先看看它的源代码：
+
+### 冒泡排序法
+
+```c
+#include <iostream>
+using namespace std;
+ 
+int main(int argc, char* argv[])
+{
+	int array[10];
+	for(int i=0;i<10;i++)
+		cin>>array[i];
+ 
+	int temp;
+	for(i=0; i<=9 ; ++i)
+		for(int j=0;j<10-1-i;j++)
+			if(array[j] > array[j+1] )
+			{
+				temp = array[j];
+				array[j] = array[j+1];
+				array[j+1] = temp;
+			}
+	for(i=0;i<10;i++)
+		cout<<array[i]<<" ";
+	cout<<endl;
+	system("pause");
+	return 0;
+```
+
+相信这种冒泡已经很熟悉了，注意看程序中最核心的比较规则是什么，是这一句if(array[j] > array[j+1] ) 他是以数字大小作为比较准则来返回true或者是false，那么我们完全可以改变一下这个排序准则，比如23,123，这两个数字，在我们这个题中它可以组成两个数字 23123和12323，分明是前者大些，所以我们可以说23排在123前面，也就是23的优先级比123大，123的优先级比23小，所以不妨写个函数，传递参数a和b，如果ab比ba大，则返回true，反之返回false，函数原型如下：
+
+```c
+bool compare(int Num1,int Num2)
+{
+	int count1,count2;
+	int MidNum1 = Num1,MidNum2 = Num2;
+	while( MidNum1 )
+	{
+		++count1;
+		MidNum1 /= 10;
+	}
+ 
+	while( MidNum2 )
+	{
+		++count2;
+		MidNum2 /= 10;
+	}
+ 
+	int a = Num1 * pow(10,count2) + Num2;
+	int b = Num2 * pow(10,count1) + Num1;
+ 
+	return (a>b)? true:false;
+}
+```
+
+好了，我们的比较准则函数也已经完成了，只需要把这个比较准则加到关键的地方，这个题就算完成了，最终代码如下：
+
+```
+#include <iostream>
+#include <cmath>
+using namespace std;
+ 
+bool compare(int Num1,int Num2);
+int main(int argc, char* argv[])
+{
+	int N;
+	cout<<"please enter the number n:"<<endl;
+	cin>>N;
+	int *array = new int [N];
+	for(int i=0;i<N;i++)
+		cin>>array[i];
+	
+	int temp;
+	for(i=0; i<=N-1 ; ++i)
+	{
+		for(int j=0;j<N-i-1;j++)
+			if( compare(array[j],array[j+1]) )
+			{
+				temp = array[j];
+				array[j] = array[j+1];
+				array[j+1] = temp;
+			}
+	}
+	
+	cout<<"the max number is:";
+	for( i=N-1 ; i>=0 ; --i)
+		cout<<array[i];
+	cout<<endl;
+	delete [] array;
+	system("pause");
+	return 0;
+}
+ 
+bool compare(int Num1,int Num2)
+{
+	int count1=0,count2=0;
+	int MidNum1 = Num1,MidNum2 = Num2;
+	while( MidNum1 )
+	{
+		++count1;
+		MidNum1 /= 10;
+	}
+	
+	while( MidNum2 )
+	{
+		++count2;
+		MidNum2 /= 10;
+	}
+	
+	int a = Num1 * pow(10,count2) + Num2;
+	int b = Num2 * pow(10,count1) + Num1;
+	
+	return (a>b)? true:false;
+}
+```
+
+## 5. 单源路径中的Djikstra算法
+
+注意核心：
+
+1.一旦一个点已经被选定，就代表它到起点的最短距离已经确定了，不会再更改
+
+2.每次比较的距离是从起点出发的路径，而不是单独比较以选定点为起点的边
+
+下面例题，以D为起点
+
+第一步，D到C最短，将C加入集合S
+
+        此时集合S有C，D
+
+第二步，距离分别是，<D,E>=4,<D,C,F>=9,<D,C,E>=8,<D,C,B>=13
+
+        将E点加入S
+
+第三步，距离分别为，<D,C,F>=9,<D,C,B>=13,<D,E,F>=6,<D,E,G>=12
+
+        将F加入S
+
+第四步，距离分别为，<D,C,B>=13,<D,C,F,A>=25,<D,C,F,G>=18,<D,C,F,B>=16,<D,E,G>=12,<D,E,F,A>=22,<D,E,F,B>=13
+
+        将G加入S
+
+第五步，距离分别为，<D,C,B>=13,<DE,F,A>=22,<D,E,G,A>=26
+
+        将B加入S
+
+第六步，<D,C,B,A>=25,<D,E,F,A>=22,<D,E,G,A>=26
+
+        将A加入S
+<img src="image/2.jpeg" style="zoom: 80%;" >
