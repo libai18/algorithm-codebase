@@ -7,8 +7,6 @@
 
 :file_folder:	Description : 我的算法代码库
 
-<img src="image/0.png"  >
-
 **<font color=red >先赞后看，养成习惯！！！	</font >**
 
 如有错误，还请您批评改正   :rose:	:rose:	:rose:
